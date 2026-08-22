@@ -61,11 +61,12 @@ export function SegmentedControl<T extends string>({
             aria-selected={selected}
             onClick={() => onChange(option.id)}
             className={cn(
-              "press relative z-10 flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
+              "press relative z-10 flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium sm:gap-2 sm:px-3",
               selected ? "text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {Icon && <Icon className="size-4" aria-hidden />}
+            {/* Icon is dropped on narrow screens so all four fit; labels alone are clear. */}
+            {Icon && <Icon className="hidden size-4 shrink-0 sm:block" aria-hidden />}
             <span>{option.label}</span>
           </button>
         );
