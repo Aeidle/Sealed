@@ -20,10 +20,12 @@ export default function Home() {
       <SiteHeader />
 
       <div className="mx-auto w-full max-w-6xl px-5">
-        {/* Two-column hero on desktop; stacks to a single column on mobile. */}
-        <div className="grid items-start gap-10 pt-6 sm:pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+        {/* Two-column hero on desktop; stacks to a single column on mobile.
+            grid-cols-1 (= minmax(0,1fr)) and min-w-0 keep the tracks from
+            blowing out past the viewport on the widest content. */}
+        <div className="grid grid-cols-1 items-start gap-10 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
           {/* Left: the action */}
-          <div className="enter flex flex-col gap-7">
+          <div className="enter flex min-w-0 flex-col gap-7">
             <header className="space-y-3">
               <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
                 Share a secret, once.
@@ -47,7 +49,7 @@ export default function Home() {
           </div>
 
           {/* Right: the info rail */}
-          <aside className="enter flex flex-col gap-5 lg:pt-2">
+          <aside className="enter flex min-w-0 flex-col gap-5 lg:pt-2">
             <HowItWorks variant="stack" />
             <PrivacyNote />
           </aside>
