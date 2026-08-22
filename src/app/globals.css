@@ -145,6 +145,13 @@
   html {
     @apply font-sans;
   }
+  /* The ambient glow is a large fixed element that extends past the right edge.
+     Clip horizontal overflow so it can't create a phantom horizontal scroll
+     (which otherwise reads as asymmetric left/right padding on mobile). */
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 /*
