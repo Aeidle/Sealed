@@ -72,6 +72,23 @@ function buildPayload(type: SecretType, form: FormState): SecretPayload | null {
   }
 }
 
+/** Digits only, max 16, grouped in 4s: "4242 4242 4242 4242". */
+function formatCardNumber(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 16);
+  return digits.replace(/(.{4})/g, "$1 ").trim();
+}
+
+/** Digits only, "MM/YY" with the slash inserted after 2 digits. */
+function formatExpiry(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 4);
+  return digits.length <= 2 ? digits : `${digits.slice(0, 2)}/${digits.slice(2)}`;
+}
+
+/** Digits only, max 3. */
+function formatCvc(value: string): string {
+  return value.replace(/\D/g, "").slice(0, 3);
+}
+
 export function CreateSecret() {
   const [type, setType] = useState<SecretType>("text");
   const [expiry, setExpiry] = useState<ExpiryOption>("1h");
@@ -255,9 +272,10 @@ export function CreateSecret() {
               <Field label="Card number">
                 <Input
                   value={form.cardNumber}
-                  onChange={(e) => update("cardNumber", e.target.value)}
+                  onChange={(e) => update("cardNumber", formatCardNumber(e.target.value))}
                   placeholder="4242 4242 4242 4242"
                   inputMode="numeric"
+                  maxLength={19}
                   className="bg-sunken font-mono"
                   autoFocus
                 />
@@ -266,17 +284,20 @@ export function CreateSecret() {
                 <Field label="Expiry">
                   <Input
                     value={form.cardExpiry}
-                    onChange={(e) => update("cardExpiry", e.target.value)}
-                    placeholder="MM / YY"
+                    onChange={(e) => update("cardExpiry", formatExpiry(e.target.value))}
+                    placeholder="MM/YY"
+                    inputMode="numeric"
+                    maxLength={5}
                     className="bg-sunken font-mono"
                   />
                 </Field>
                 <Field label="CVC">
                   <Input
                     value={form.cardCvc}
-                    onChange={(e) => update("cardCvc", e.target.value)}
+                    onChange={(e) => update("cardCvc", formatCvc(e.target.value))}
                     placeholder="123"
                     inputMode="numeric"
+                    maxLength={3}
                     className="bg-sunken font-mono"
                   />
                 </Field>

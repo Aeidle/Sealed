@@ -9,7 +9,7 @@
 
 **Share a secret, once.** A link that self-destructs after a single read, encrypted in your browser, never on the server.
 
-[![Stars](https://img.shields.io/github/stars/Aeidle/Sealed?style=flat&logo=github)](https://github.com/Aeidle/Sealed/stargazers)
+[![Stars](https://img.shields.io/github/stars/Aeidle/Sealed?style=flat&logo=github&label=Stars&color=1f6feb)](https://github.com/Aeidle/Sealed/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
