@@ -1,11 +1,16 @@
 <div align="center">
 
-# 🔒 Sealed
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/logo-dark.svg">
+  <img src="public/logo-light.svg" alt="Sealed" width="76" height="76">
+</picture>
+
+# Sealed
 
 **Share a secret, once.** A link that self-destructs after a single read, encrypted in your browser, never on the server.
 
 [![Stars](https://img.shields.io/github/stars/Aeidle/Sealed?style=flat&logo=github)](https://github.com/Aeidle/Sealed/stargazers)
-[![License: MIT](https://img.shields.io/github/license/Aeidle/Sealed)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -14,10 +19,10 @@
 
 ---
 
-Sealed is a Yopass-style one-time secret sharer. You encrypt a secret in your
-browser, get a link, and the link works **exactly once**: opening it fetches the
-ciphertext, the server deletes it in the same step, and your browser decrypts it
-locally. The server never sees your plaintext or your key.
+Sealed is a one-time secret sharer. You encrypt a secret in your browser, get a
+link, and the link works **exactly once**: opening it fetches the ciphertext, the
+server deletes it in the same step, and your browser decrypts it locally. The
+server never sees your plaintext or your key.
 
 ## Why it's private
 

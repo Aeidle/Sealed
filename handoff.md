@@ -4,7 +4,7 @@ Status as of 2026-08-22.
 
 ## What Sealed is
 
-A Yopass-style one-time secret sharer on Next.js 16 + React 19 + Tailwind v4 +
+A one-time secret sharer on Next.js 16 + React 19 + Tailwind v4 +
 shadcn/ui (Base UI primitives), pnpm, Upstash Redis, and the Web Crypto API.
 
 - Client-side **AES-256-GCM** encryption. The server only ever stores ciphertext;
