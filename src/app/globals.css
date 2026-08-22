@@ -1,0 +1,406 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  /* Theme-aware app surfaces (defined per theme in :root / .dark below). */
+  --color-hairline: var(--hairline);
+  --color-sunken: var(--sunken);
+  --color-overlay: var(--overlay);
+  --color-overlay-strong: var(--overlay-strong);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* App surfaces — light theme (dark ink on light glass). */
+  --hairline: oklch(0.145 0 0 / 0.1);
+  --sunken: oklch(0.145 0 0 / 0.04);
+  --overlay: oklch(0.145 0 0 / 0.06);
+  --overlay-strong: oklch(0.145 0 0 / 0.1);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  /* App surfaces — dark theme (light ink on dark glass). */
+  --hairline: oklch(1 0 0 / 0.08);
+  --sunken: oklch(0 0 0 / 0.2);
+  --overlay: oklch(1 0 0 / 0.08);
+  --overlay-strong: oklch(1 0 0 / 0.15);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/*
+ * Ambient page background: a flat base plus a single soft purple glow pinned to
+ * the viewport that drifts slowly. The glow is a pseudo-element animated with
+ * `transform` only (GPU-composited, no repaint); `isolation: isolate` keeps it
+ * layered behind content without escaping the page. Light theme.
+ */
+.app-backdrop {
+  position: relative;
+  isolation: isolate;
+  background-color: oklch(0.98 0.003 260);
+}
+
+.dark .app-backdrop {
+  background-color: oklch(0.12 0 0);
+}
+
+/*
+ * The glow is a big box whose radial-gradient uses `closest-side` sizing, so the
+ * color is guaranteed fully transparent at every edge of the box. That means no
+ * hard cut-off where the element ends, and translating it never exposes a seam.
+ * The box also overflows the viewport past the drift distance.
+ */
+.app-backdrop::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 9999px;
+  top: -28vh;
+  right: -32vw;
+  width: 95vw;
+  height: 95vh;
+  background: radial-gradient(ellipse closest-side at center, oklch(0.66 0.1 305 / 0.3) 0%, transparent 100%);
+  animation: drift-b 32s var(--ease-in-out) infinite alternate;
+}
+
+.dark .app-backdrop::after {
+  background: radial-gradient(ellipse closest-side at center, oklch(0.32 0.05 305 / 0.55) 0%, transparent 100%);
+}
+
+/* Slow drift + scale breath. Cycle ~32s (well below the distracting ~0.2Hz). */
+@keyframes drift-b {
+  from {
+    transform: translate3d(4vw, 0, 0) scale(1.15);
+  }
+  to {
+    transform: translate3d(-11vw, 9vh, 0) scale(1);
+  }
+}
+
+/* Frosted glass surface used by the main card. Light theme. */
+.glass {
+  background: oklch(1 0 0 / 0.62);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid oklch(0.145 0 0 / 0.08);
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.7) inset,
+    0 20px 50px -24px oklch(0.145 0 0 / 0.25);
+}
+
+.dark .glass {
+  background: oklch(0.2 0.004 260 / 0.55);
+  border-color: oklch(1 0 0 / 0.08);
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.06) inset,
+    0 20px 60px -20px oklch(0 0 0 / 0.7);
+}
+
+/* Motion tokens — the only curves used in this app. Do not inline others. */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* strong ease-out for entrances/exits */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* on-screen movement */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like drawer/segment curve */
+}
+
+/*
+ * Highlight easing for the segmented control. A tap carries no momentum, so
+ * this is the critically damped iOS drawer curve (no overshoot). The transition
+ * animates from the presentation value, so re-tapping mid-move redirects.
+ */
+.segment-indicator {
+  transition-timing-function: var(--ease-drawer);
+}
+
+/*
+ * Materialize: content arriving with a slight rise + scale + fade, rather than a
+ * flat opacity change. transform + opacity only (no blur) so it stays on the GPU
+ * and off the paint path. Used when card content swaps (create -> link ready,
+ * reveal states).
+ */
+@keyframes materialize {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.materialize {
+  animation: materialize 0.4s var(--ease-out) both;
+}
+
+/*
+ * Lighter, faster variant of materialize for the field group that swaps when the
+ * secret type changes. That control is toggled far more often than the rare
+ * result/reveal swaps, so it gets a snappier, sub-300ms duration.
+ */
+.swap {
+  animation: materialize 0.22s var(--ease-out) both;
+}
+
+/*
+ * Page-level mount entrance. Blur-free on purpose: a `filter` on an ancestor of
+ * a backdrop-filter surface would neutralize the glass, so the arriving column
+ * only rises + fades.
+ */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enter {
+  animation: enter 0.45s var(--ease-out) both;
+}
+
+/*
+ * Shake: a quick horizontal jitter that signals rejected input (empty field,
+ * rate-limited). transform only. Re-triggered by remounting the element (key).
+ */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.shake {
+  animation: shake 0.4s ease both;
+}
+
+/* Pop: a small scale-in for confirmation icons (the "Copied" check). */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pop {
+  animation: pop 0.18s var(--ease-out) both;
+}
+
+/* Instant press feedback on pointer-down. Named properties only, never `all`. */
+.press {
+  transition:
+    transform 120ms var(--ease-out),
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.press:active {
+  transform: scale(0.97);
+}
+
+/* --- Accessibility: honor the three independent user signals --- */
+
+/* Reduced motion: gentle cross-fades, no springs/slides/blur travel. */
+@media (prefers-reduced-motion: reduce) {
+  .segment-indicator {
+    transition-duration: 1ms !important;
+  }
+  .materialize,
+  .swap,
+  .enter,
+  .shake,
+  .pop {
+    animation: none;
+  }
+  /* Ambient glow stays (it adds depth) but stops drifting. */
+  .app-backdrop::after {
+    animation: none;
+  }
+  .press:active {
+    transform: none;
+  }
+  /* Spinners: swap continuous rotation for a gentle opacity pulse. */
+  .animate-spin {
+    animation: rm-pulse 1.2s ease-in-out infinite;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes rm-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Reduced transparency: frost the glass into a near-solid surface. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: oklch(0.99 0 0);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .dark .glass {
+    background: oklch(0.19 0.004 260);
+  }
+  .app-backdrop::after {
+    display: none;
+  }
+}
+
+/* Increased contrast: near-solid surfaces with a defined border. */
+@media (prefers-contrast: more) {
+  .glass {
+    background: oklch(1 0 0 / 0.97);
+    border-color: oklch(0.145 0 0 / 0.3);
+  }
+  .dark .glass {
+    background: oklch(0.16 0.004 260 / 0.96);
+    border-color: oklch(1 0 0 / 0.28);
+  }
+}
