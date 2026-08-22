@@ -7,6 +7,7 @@ export default async function RevealPage({ params }: { params: Promise<{ id: str
 
   return (
     <main className="app-backdrop min-h-screen pb-24">
+      <div className="glow-layer" aria-hidden />
       <SiteHeader />
 
       <div className="enter mx-auto flex w-full max-w-md flex-col gap-8 px-5 pt-10 sm:pt-16">

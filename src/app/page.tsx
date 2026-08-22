@@ -16,6 +16,7 @@ const TRUST = [
 export default function Home() {
   return (
     <main className="app-backdrop min-h-screen pb-20">
+      <div className="glow-layer" aria-hidden />
       <SiteHeader />
 
       <div className="mx-auto w-full max-w-6xl px-5">

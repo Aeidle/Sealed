@@ -171,17 +171,29 @@
 }
 
 /*
- * The glow is a big box whose radial-gradient uses `closest-side` sizing, so the
- * color is guaranteed fully transparent at every edge of the box. That means no
- * hard cut-off where the element ends, and translating it never exposes a seam.
- * The box also overflows the viewport past the drift distance.
+ * `.glow-layer` is a fixed, viewport-sized clip container (rendered as the first
+ * child of the page's <main>). Its `overflow: hidden` clips the drifting glow so
+ * it can never extend past the viewport edge — mobile browsers otherwise let a
+ * fixed element past the edge create a horizontal scroll (which reads as
+ * left-only padding). `overflow: hidden` on html/body can't clip a fixed
+ * element, so the clip has to live on a real container like this.
  */
-.app-backdrop::after {
-  content: "";
+.glow-layer {
   position: fixed;
+  inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-  border-radius: 9999px;
+}
+
+/*
+ * The glow itself. `closest-side` sizing keeps it fully transparent at every
+ * edge (no hard cut-off, and drifting never exposes a seam). It overflows the
+ * clip container, which is exactly why the container clips it.
+ */
+.glow-layer::before {
+  content: "";
+  position: absolute;
   top: -28vh;
   right: -32vw;
   width: 95vw;
@@ -190,7 +202,7 @@
   animation: drift-b 32s var(--ease-in-out) infinite alternate;
 }
 
-.dark .app-backdrop::after {
+.dark .glow-layer::before {
   background: radial-gradient(ellipse closest-side at center, oklch(0.32 0.05 305 / 0.55) 0%, transparent 100%);
 }
 
@@ -358,7 +370,7 @@
     animation: none;
   }
   /* Ambient glow stays (it adds depth) but stops drifting. */
-  .app-backdrop::after {
+  .glow-layer::before {
     animation: none;
   }
   .press:active {
@@ -395,7 +407,7 @@
   .dark .glass {
     background: oklch(0.19 0.004 260);
   }
-  .app-backdrop::after {
+  .glow-layer {
     display: none;
   }
 }
