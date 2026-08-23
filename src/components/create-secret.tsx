@@ -479,23 +479,30 @@ export function CreateSecret() {
           )}
 
           {protection === "code" && (
-            <div className="swap space-y-2">
-              <div className="flex items-center justify-between gap-2 rounded-xl border border-hairline bg-sunken px-4 py-3">
-                <span className="font-mono text-2xl tracking-[0.3em] text-foreground tabular-nums">
-                  {password}
-                </span>
+            <div className="swap space-y-3">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                {password.split("").map((digit, i) => (
+                  <div
+                    key={i}
+                    className="grid size-10 place-items-center rounded-lg border border-hairline bg-sunken font-mono text-lg text-foreground shadow-sm tabular-nums sm:size-11"
+                  >
+                    {digit}
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center">
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="press shrink-0"
+                  variant="outline"
+                  size="sm"
+                  className="press gap-1.5"
                   onClick={() => setPassword(generateCode())}
-                  aria-label="Regenerate code"
                 >
-                  <RefreshCw className="size-4" />
+                  <RefreshCw className="size-3.5" />
+                  Regenerate
                 </Button>
               </div>
-              <p className="text-xs leading-relaxed text-muted-foreground">
+              <p className="text-center text-xs leading-relaxed text-muted-foreground">
                 A short code to share by voice or a separate message. Convenient, but weaker
                 than a passphrase.
               </p>
