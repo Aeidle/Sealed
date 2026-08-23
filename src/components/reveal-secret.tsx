@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, Check, Copy, Eye, Loader2 } from "lucide-react";
+import { AlertTriangle, Check, Copy, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
 import { CountdownRingButton } from "@/components/countdown-ring-button";
@@ -165,22 +165,59 @@ function SecretHeading() {
   );
 }
 
+/** Fixed-length mask — never reveals the value's real length. */
+const MASK = "•".repeat(12);
+
+/** Eye toggle to show/hide a revealed value. Hidden by default. */
+function RevealToggle({ shown, onToggle }: { shown: boolean; onToggle: () => void }) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="press"
+      onClick={onToggle}
+      aria-label={shown ? "Hide value" : "Show value"}
+      aria-pressed={shown}
+    >
+      {shown ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+    </Button>
+  );
+}
+
 function CopyableBlock({ value, children }: { value: string; children: React.ReactNode }) {
+  const [shown, setShown] = useState(false);
   return (
     <div className="relative rounded-xl border border-hairline bg-sunken p-4">
-      <div className="pr-10">{children}</div>
-      <CopyButton value={value} className="absolute right-2 top-2" />
+      <div className="pr-20">
+        {shown ? children : <span className="font-mono text-sm tracking-widest text-muted-foreground">{MASK}</span>}
+      </div>
+      <div className="absolute right-2 top-2 flex items-center gap-0.5">
+        <RevealToggle shown={shown} onToggle={() => setShown((s) => !s)} />
+        <CopyButton value={value} />
+      </div>
     </div>
   );
 }
 
 function FieldRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  const [shown, setShown] = useState(false);
   return (
     <div className="rounded-xl border border-hairline bg-sunken p-3">
       <div className="mb-1 text-xs text-muted-foreground">{label}</div>
       <div className="flex items-center justify-between gap-2">
-        <span className={mono ? "break-all font-mono text-sm" : "break-all text-sm"}>{value}</span>
-        <CopyButton value={value} />
+        <span
+          className={cn(
+            "break-all text-sm",
+            mono && "font-mono",
+            !shown && "font-mono tracking-widest text-muted-foreground select-none",
+          )}
+        >
+          {shown ? value : MASK}
+        </span>
+        <div className="flex shrink-0 items-center gap-0.5">
+          <RevealToggle shown={shown} onToggle={() => setShown((s) => !s)} />
+          <CopyButton value={value} />
+        </div>
       </div>
     </div>
   );
