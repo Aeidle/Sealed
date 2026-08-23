@@ -1,6 +1,7 @@
 # Handoff
 
-Status as of 2026-08-22.
+Status as of 2026-08-24. **Live at https://getsealed.vercel.app** (Vercel Hobby,
+region `fra1`, auto-deploys on push to `main`). Repo is public.
 
 ## What Sealed is
 
@@ -14,7 +15,12 @@ shadcn/ui (Base UI primitives), pnpm, Upstash Redis, and the Web Crypto API.
 - `GET /api/secret/[id]` — atomic `GETDEL`, one-time read, deletes on read.
 - Rate limiting on both endpoints (create 10/min, read 30/min per IP), tuned for
   low Redis command usage (`fixedWindow` + `ephemeralCache`).
-- Secret types: Text / Link / Login / Card.
+- Secret types: Text / Link / Login / Card, with input formatting on the Card
+  fields.
+- **Optional password protection** (passphrase or generated 6-digit code) —
+  `R XOR PBKDF2(password)`, entirely client-side, no API changes. See
+  `important.md` §4b.
+- Revealed values are **masked by default** with a per-field eye toggle.
 
 ## UI / design
 
@@ -61,10 +67,15 @@ shadcn/ui (Base UI primitives), pnpm, Upstash Redis, and the Web Crypto API.
 - shadcn init left `--font-sans` self-referential (fell back to system sans);
   it's now wired to Geist. Don't regress that.
 - Redis client + rate limiters are lazy singletons (see `important.md` §6).
+- Deployed on Vercel via native Git integration (no GitHub Action). `vercel.json`
+  pins functions to `fra1`. The two Upstash env vars are set in the Vercel
+  project (Production + Preview); env-var values must have **no quotes**.
 
 ## Not done (optional future work)
 
-- No deployment config (Vercel etc.) yet. Set the two env vars in the host.
 - No automated test suite in-repo (verification was done via ad-hoc scripts).
+- Custom domain (`sealed.aeidle.com`) not wired yet — needs `aeidle.com` bought
+  and a CNAME to Vercel.
 - Possible extras: a "burn now" manual-delete button, a copy-link QR code, a
-  max-views > 1 option.
+  max-views > 1 option, Argon2 (wasm) instead of PBKDF2 for stronger password
+  KDF.

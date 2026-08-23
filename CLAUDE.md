@@ -54,6 +54,10 @@ plaintext or the key.
 4. **Reveal (once).** `GET /api/secret/[id]` does an atomic Redis `GETDEL` — it
    returns the ciphertext and deletes it in one operation, so a second read gets
    a 404. The client reads the key from `location.hash` and decrypts locally.
+5. **Optional password (client).** A sender can add a passphrase or a generated
+   6-digit code; the AES key becomes `R XOR PBKDF2(password, salt)` (salt +
+   marker in the fragment, password never stored or in the link). The reveal
+   page prompts for it and retries locally. See `important.md` §4b.
 
 ## Layout
 
@@ -80,7 +84,8 @@ src/
   hooks/
     use-prefers-reduced-motion.ts   # useSyncExternalStore matchMedia
   lib/
-    crypto.ts                # AES-256-GCM encrypt/decrypt (browser only)
+    crypto.ts                # AES-256-GCM + optional PBKDF2 password (browser only)
+    passphrase.ts            # passphrase wordlist + 6-digit code generators
     redis.ts                 # lazy Upstash client, EXPIRY_OPTIONS, key helpers
     ratelimit.ts             # lazy fixed-window limiters + ephemeralCache (create + read)
     id.ts                    # nanoid secret IDs

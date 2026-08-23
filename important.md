@@ -33,9 +33,28 @@ true. Breaking any of them silently weakens the security model.
   a tampered ciphertext fails `decrypt()` (verified: tampering throws).
 - A fresh random key **and** IV are generated per secret. Never reuse an IV with
   the same key.
-- `fragment` format is `base64url(key).base64url(iv)` (dot-separated, no
-  padding). If you change this format, update both `encryptSecret` and
-  `decryptSecret`.
+- `fragment` format is `base64url(R).base64url(iv)` unprotected, or
+  `base64url(R).base64url(iv).base64url(salt).<p|c>` when password-protected. If
+  you change this format, update `encryptSecret`, `decryptSecret`, **and**
+  `fragmentInfo`.
+
+## 4b. Optional password protection
+
+- When a password is set, the AES key is **`R XOR PBKDF2(password, salt)`**, where
+  `R` is random key material in the fragment and `salt` is public. Decryption
+  needs BOTH the fragment (R + salt) **and** the password.
+- **Never** derive the key from the password alone, and **never** store any
+  password-derived material (a wrapped key, a hash) server-side. Either would let
+  the server brute-force the password offline and break zero-knowledge. Keeping
+  `R` out of the server (it lives only in the fragment) is what prevents that.
+- The password is **never** in the link and **never** in Redis. We store nothing
+  about it, so a lost password means the secret is unrecoverable — by design.
+- `passphrase` vs `code` is a UI marker only (`p`/`c` in the fragment); same
+  crypto. The 6-digit code is low-entropy (~20 bits) and only a casual gate — the
+  create UI must keep labelling it as weaker than a passphrase.
+- Reveal must fetch the ciphertext **once** and retry the password **locally**
+  (`cipherRef` in `reveal-secret.tsx`) so a wrong password doesn't re-burn the
+  one-time read.
 
 ## 5. Rate limiting
 

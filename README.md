@@ -36,10 +36,16 @@ server never sees your plaintext or your key.
   and deleted in a single operation, so a second open gets a 404.
 - **Self-destructing.** Every secret carries a TTL (5m / 1h / 1d / 7d) and
   expires on its own if never read.
+- **Optional password.** Add a passphrase or a 6-digit code as a second,
+  out-of-band factor. The key becomes `R XOR PBKDF2(password)` — a leaked link
+  alone can't decrypt, and the server still never can. The password is never
+  stored or put in the link.
 
 ## Features
 
 - Text, Link, Login, and Card secret types
+- Optional password protection (passphrase or 6-digit code)
+- Revealed values masked by default, with a per-field reveal toggle
 - Rate limiting on both endpoints
 - Light / dark / system themes
 - Fully keyboard- and reduced-motion-accessible UI
