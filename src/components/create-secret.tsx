@@ -238,37 +238,33 @@ export function CreateSecret() {
           </div>
 
           {protection !== "off" && (
-            <div className="w-full space-y-2 rounded-xl border border-hairline bg-sunken p-3 text-left">
-              <div className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                  <KeyRound className="size-3.5" />
-                  {protection === "code" ? "One-time code" : "Passphrase"}
-                </span>
-                <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
-                  Share separately
-                </span>
+            <div className="w-full space-y-3 rounded-2xl border border-hairline bg-card p-5 text-center shadow-sm">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+                <KeyRound className="size-3.5" />
+                {protection === "code" ? "One-time code" : "Passphrase"}
+                <span aria-hidden>·</span> Share separately
               </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    "flex-1 font-mono text-foreground",
-                    protection === "code" ? "text-lg tracking-[0.3em]" : "text-sm break-all",
-                  )}
-                >
-                  {password}
-                </span>
+              <p
+                className={cn(
+                  "break-all font-mono text-foreground",
+                  protection === "code" ? "text-2xl tracking-[0.3em] tabular-nums" : "text-lg",
+                )}
+              >
+                {password}
+              </p>
+              <div className="flex justify-center">
                 <Button
-                  size="icon"
-                  variant="ghost"
-                  className="press shrink-0"
+                  variant="outline"
+                  size="sm"
+                  className="press gap-1.5"
                   onClick={copyPassword}
-                  aria-label="Copy password"
                 >
                   {copiedPw ? (
                     <Check key="check" className="pop size-4 text-emerald-400" />
                   ) : (
                     <Copy className="size-4" />
                   )}
+                  {copiedPw ? "Copied" : "Copy"}
                 </Button>
               </div>
               <p className="text-xs leading-relaxed text-muted-foreground">
