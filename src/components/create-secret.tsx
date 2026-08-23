@@ -1,17 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Link2, Loader2, Lock, Plus, ShieldCheck } from "lucide-react";
+import {
+  Check,
+  Copy,
+  Dices,
+  Eye,
+  EyeOff,
+  Hash,
+  KeyRound,
+  Link2,
+  Loader2,
+  Lock,
+  Plus,
+  RefreshCw,
+  ShieldCheck,
+  ShieldOff,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GlassCard } from "@/components/glass-card";
 import { SegmentedControl } from "@/components/segmented-control";
-import { encryptSecret } from "@/lib/crypto";
+import { encryptSecret, type EncryptOptions } from "@/lib/crypto";
+import { generateCode, generatePassphrase } from "@/lib/passphrase";
 import { SECRET_TYPES, serializePayload, type SecretPayload, type SecretType } from "@/lib/secret-types";
 import { EXPIRY_OPTIONS, type ExpiryOption } from "@/lib/redis";
 import { cn } from "@/lib/utils";
+
+type Protection = "off" | "passphrase" | "code";
+
+const PROTECTION_OPTIONS = [
+  { id: "off" as const, label: "None", icon: ShieldOff },
+  { id: "passphrase" as const, label: "Passphrase", icon: KeyRound },
+  { id: "code" as const, label: "Code", icon: Hash },
+];
 
 const EXPIRY_LABELS: Record<ExpiryOption, string> = {
   "5m": "5 minutes",
@@ -99,6 +123,10 @@ export function CreateSecret() {
   const [copied, setCopied] = useState(false);
   // Bumped on each rejected submit so the error line remounts and replays shake.
   const [shakeKey, setShakeKey] = useState(0);
+  const [protection, setProtection] = useState<Protection>("off");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [copiedPw, setCopiedPw] = useState(false);
 
   function update<K extends keyof FormState>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -109,6 +137,15 @@ export function CreateSecret() {
     setShakeKey((k) => k + 1);
   }
 
+  function changeProtection(next: Protection) {
+    setProtection(next);
+    setError(null);
+    // A code is meant to be read aloud, so generate + show it. A passphrase
+    // starts empty for the user to type or generate.
+    setPassword(next === "code" ? generateCode() : "");
+    setShowPassword(next === "passphrase");
+  }
+
   async function handleSubmit() {
     setError(null);
     const payload = buildPayload(type, form);
@@ -116,10 +153,18 @@ export function CreateSecret() {
       fail("Fill in the secret before creating a link.");
       return;
     }
+    if (protection === "passphrase" && password.trim().length < 4) {
+      fail("Use a passphrase of at least 4 characters.");
+      return;
+    }
 
     setBusy(true);
     try {
-      const { ciphertext, fragment } = await encryptSecret(serializePayload(payload));
+      const options: EncryptOptions =
+        protection === "off"
+          ? {}
+          : { password, mode: protection === "code" ? "code" : "passphrase" };
+      const { ciphertext, fragment } = await encryptSecret(serializePayload(payload), options);
       const res = await fetch("/api/secret", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,11 +192,20 @@ export function CreateSecret() {
     setTimeout(() => setCopied(false), 1800);
   }
 
+  async function copyPassword() {
+    await navigator.clipboard.writeText(password);
+    setCopiedPw(true);
+    setTimeout(() => setCopiedPw(false), 1800);
+  }
+
   function reset() {
     setShareUrl(null);
     setForm(EMPTY_FORM);
     setError(null);
     setCopied(false);
+    setProtection("off");
+    setPassword("");
+    setShowPassword(false);
   }
 
   if (shareUrl) {
@@ -182,6 +236,47 @@ export function CreateSecret() {
               {copied ? "Copied" : "Copy"}
             </Button>
           </div>
+
+          {protection !== "off" && (
+            <div className="w-full space-y-2 rounded-xl border border-hairline bg-sunken p-3 text-left">
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                  <KeyRound className="size-3.5" />
+                  {protection === "code" ? "One-time code" : "Passphrase"}
+                </span>
+                <span className="text-[11px] tracking-wide text-muted-foreground uppercase">
+                  Share separately
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    "flex-1 font-mono text-foreground",
+                    protection === "code" ? "text-lg tracking-[0.3em]" : "text-sm break-all",
+                  )}
+                >
+                  {password}
+                </span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="press shrink-0"
+                  onClick={copyPassword}
+                  aria-label="Copy password"
+                >
+                  {copiedPw ? (
+                    <Check key="check" className="pop size-4 text-emerald-400" />
+                  ) : (
+                    <Copy className="size-4" />
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                The recipient needs this to open the secret. Send it a different way than the
+                link, and we never store it, so if it&apos;s lost the secret can&apos;t be recovered.
+              </p>
+            </div>
+          )}
 
           <p className="text-xs text-muted-foreground">
             The decryption key lives only in this link&apos;s <code>#</code> fragment. We never
@@ -333,6 +428,79 @@ export function CreateSecret() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="space-y-3">
+          <Label className="text-xs text-muted-foreground">Password protection</Label>
+          <SegmentedControl
+            options={PROTECTION_OPTIONS}
+            value={protection}
+            onChange={changeProtection}
+          />
+
+          {protection === "passphrase" && (
+            <div className="swap space-y-2">
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Type or generate a passphrase"
+                    className="bg-sunken pr-9 font-mono"
+                    autoComplete="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="press absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? "Hide passphrase" : "Show passphrase"}
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="press shrink-0 gap-1.5"
+                  onClick={() => {
+                    setPassword(generatePassphrase());
+                    setShowPassword(true);
+                  }}
+                >
+                  <Dices className="size-4" />
+                  <span className="hidden sm:inline">Generate</span>
+                </Button>
+              </div>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Recommended for sensitive secrets. Share it separately from the link.
+              </p>
+            </div>
+          )}
+
+          {protection === "code" && (
+            <div className="swap space-y-2">
+              <div className="flex items-center justify-between gap-2 rounded-xl border border-hairline bg-sunken px-4 py-3">
+                <span className="font-mono text-2xl tracking-[0.3em] text-foreground tabular-nums">
+                  {password}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="press shrink-0"
+                  onClick={() => setPassword(generateCode())}
+                  aria-label="Regenerate code"
+                >
+                  <RefreshCw className="size-4" />
+                </Button>
+              </div>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                A short code to share by voice or a separate message. Convenient, but weaker
+                than a passphrase.
+              </p>
+            </div>
+          )}
         </div>
 
         {error && (
