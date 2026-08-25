@@ -1,51 +1,60 @@
 "use client";
 
-import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 /**
- * shadcn-style light/dark/system switch. The icon cross-fades between sun and
- * moon; the menu offers all three modes.
+ * Single-button light/dark toggle (no dropdown), matching the reference: the
+ * button takes the theme colour (white in light, dark in dark, defined by a
+ * hairline ring), with a bold sun that cross-fades and spins into a bold
+ * crescent moon. Pure CSS off the `.dark` class (transform + opacity only — no
+ * animation library, no hydration flash). Default theme is `system`.
  */
 export function ThemeToggle() {
   const { setTheme } = useTheme();
 
+  function toggle() {
+    const isDark =
+      typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "light" : "dark");
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="press rounded-full text-muted-foreground hover:text-foreground"
-          />
-        }
-      >
-        <Sun className="size-[1.15rem] scale-100 rotate-0 transition-all duration-300 dark:scale-0 dark:-rotate-90" />
-        <Moon className="absolute size-[1.15rem] scale-0 rotate-90 transition-all duration-300 dark:scale-100 dark:rotate-0" />
-        <span className="sr-only">Toggle theme</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-36">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="size-4" />
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Moon className="size-4" />
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Monitor className="size-4" />
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label="Toggle theme"
+      className="press relative grid size-9 place-items-center rounded-full bg-background text-foreground shadow-sm ring-1 ring-hairline"
+    >
+      <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
+        {/* Sun — shown in light */}
+        <g
+          fill="currentColor"
+          className="origin-center [transform-box:fill-box] rotate-0 scale-100 opacity-100 transition-[transform,opacity] duration-300 [transition-timing-function:var(--ease-out)] dark:-rotate-90 dark:scale-0 dark:opacity-0"
+        >
+          <circle cx="12" cy="12" r="4.6" />
+          <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M12 1.6v2.4" />
+            <path d="M12 20v2.4" />
+            <path d="M22.4 12H20" />
+            <path d="M4 12H1.6" />
+            <path d="m19.4 4.6-1.7 1.7" />
+            <path d="m6.3 17.7-1.7 1.7" />
+            <path d="m19.4 19.4-1.7-1.7" />
+            <path d="m6.3 6.3-1.7-1.7" />
+          </g>
+        </g>
+
+        {/* Moon — shown in dark (bold crescent carved from a disc) */}
+        <g
+          className="origin-center [transform-box:fill-box] rotate-90 scale-0 opacity-0 transition-[transform,opacity] duration-300 [transition-timing-function:var(--ease-out)] dark:rotate-0 dark:scale-100 dark:opacity-100"
+        >
+          <mask id="theme-toggle-moon">
+            <rect x="0" y="0" width="24" height="24" fill="white" />
+            <circle cx="18" cy="9" r="8" fill="black" />
+          </mask>
+          <circle cx="12" cy="12" r="8" fill="currentColor" mask="url(#theme-toggle-moon)" />
+        </g>
+      </svg>
+    </button>
   );
 }

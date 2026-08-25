@@ -13,6 +13,7 @@ import {
   Loader2,
   Lock,
   Plus,
+  QrCode,
   RefreshCw,
   ShieldCheck,
   ShieldOff,
@@ -22,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GlassCard } from "@/components/glass-card";
+import { SecretQr } from "@/components/secret-qr";
 import { SegmentedControl } from "@/components/segmented-control";
 import { encryptSecret, type EncryptOptions } from "@/lib/crypto";
 import { generateCode, generatePassphrase } from "@/lib/passphrase";
@@ -127,6 +129,7 @@ export function CreateSecret() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [copiedPw, setCopiedPw] = useState(false);
+  const [showQr, setShowQr] = useState(false);
 
   function update<K extends keyof FormState>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -206,6 +209,7 @@ export function CreateSecret() {
     setProtection("off");
     setPassword("");
     setShowPassword(false);
+    setShowQr(false);
   }
 
   if (shareUrl) {
@@ -236,6 +240,21 @@ export function CreateSecret() {
               {copied ? "Copied" : "Copy"}
             </Button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setShowQr((v) => !v)}
+            className="press flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <QrCode className="size-3.5" />
+            {showQr ? "Hide QR code" : "Show QR code"}
+          </button>
+
+          {showQr && (
+            <div className="materialize">
+              <SecretQr value={shareUrl} />
+            </div>
+          )}
 
           {protection !== "off" && (
             <div className="w-full space-y-3 rounded-2xl border border-hairline bg-card p-5 text-center shadow-sm">

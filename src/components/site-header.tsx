@@ -20,14 +20,13 @@ export function SiteHeader() {
       <div className="flex items-center gap-1">
         <Button
           variant="ghost"
-          size="icon"
           nativeButton={false}
-          className="press rounded-full text-muted-foreground hover:text-foreground"
+          className="press grid size-9 place-items-center rounded-full bg-overlay text-muted-foreground ring-1 ring-hairline hover:text-foreground"
           render={
             <a href={GITHUB_URL} target="_blank" rel="noreferrer noopener" aria-label="Sealed on GitHub" />
           }
         >
-          <GithubIcon className="size-[1.15rem]" />
+          <GithubIcon className="size-[18px]" />
         </Button>
         <ThemeToggle />
       </div>
