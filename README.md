@@ -19,6 +19,10 @@
 
 ---
 
+<p align="center">
+  <img src="docs/demo.gif" alt="Creating a secret, sharing the link, revealing it once, and the link self-destructing" width="800">
+</p>
+
 Sealed is a one-time secret sharer. You encrypt a secret in your browser, get a
 link, and the link works **exactly once**: opening it fetches the ciphertext, the
 server deletes it in the same step, and your browser decrypts it locally. The
