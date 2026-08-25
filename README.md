@@ -45,6 +45,16 @@ server never sees your plaintext or your key.
   alone can't decrypt, and the server still never can. The password is never
   stored or put in the link.
 
+### Password protection
+
+Protect a secret with a generated 6-digit code (or a passphrase) and share it
+through a different channel — read it aloud, text it separately. The recipient
+enters it to unlock.
+
+<p align="center">
+  <img src="docs/demo-password.gif" alt="Protecting a secret with a 6-digit code, then unlocking it on the reveal page" width="800">
+</p>
+
 ## Features
 
 - Text, Link, Login, and Card secret types
