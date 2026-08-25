@@ -17,7 +17,7 @@ export function SiteHeader() {
         Sealed
       </Link>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2.5">
         <Button
           variant="ghost"
           nativeButton={false}
