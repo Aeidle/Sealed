@@ -23,7 +23,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle theme"
-      className="press relative grid size-9 place-items-center rounded-full bg-background text-foreground shadow-sm ring-1 ring-hairline"
+      className="press relative grid size-9 place-items-center rounded-full bg-background text-foreground shadow-sm ring-1 ring-hairline hover:scale-105 hover:ring-foreground/25"
     >
       <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
         {/* Sun — shown in light */}

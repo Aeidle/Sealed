@@ -346,10 +346,14 @@
 
 /* Instant press feedback on pointer-down. Named properties only, never `all`. */
 .press {
+  cursor: pointer;
   transition:
     transform 120ms var(--ease-out),
     background-color 160ms ease,
     color 160ms ease;
+}
+.press:disabled {
+  cursor: default;
 }
 .press:active {
   transform: scale(0.97);

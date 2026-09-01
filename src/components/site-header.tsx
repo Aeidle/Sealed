@@ -21,7 +21,7 @@ export function SiteHeader() {
         <Button
           variant="ghost"
           nativeButton={false}
-          className="press grid size-9 place-items-center rounded-full bg-overlay text-muted-foreground ring-1 ring-hairline hover:text-foreground"
+          className="press grid size-9 place-items-center rounded-full bg-overlay text-muted-foreground ring-1 ring-hairline hover:scale-105 hover:text-foreground hover:ring-foreground/25"
           render={
             <a href={GITHUB_URL} target="_blank" rel="noreferrer noopener" aria-label="Sealed on GitHub" />
           }
